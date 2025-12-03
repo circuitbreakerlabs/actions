@@ -26,12 +26,8 @@ runs:
   using: composite
   steps:
     - name: Install uv
-      shell: bash
-      run: |
-        set -eo pipefail
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-        echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244
+
     - name: Evaluate system prompt
       shell: bash
       working-directory: ${{ github.action_path }}/..
