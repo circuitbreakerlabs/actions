@@ -8,19 +8,19 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "circuit-breaker-labs" },
-    { name = "ruff" },
 ]
 
 [package.optional-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "circuit-breaker-labs", specifier = ">=1.0.4" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0.0" },
-    { name = "ruff", specifier = ">=0.14.7" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.7" },
 ]
 provides-extras = ["dev"]
 
