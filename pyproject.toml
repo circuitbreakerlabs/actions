@@ -14,7 +14,6 @@ dependencies = [
 ]
 
 [project.scripts]
-cli = "actions.main:cli"
 evaluate-system-prompt = "actions.evaluate_system_prompt:main"
 
 [project.optional-dependencies]
