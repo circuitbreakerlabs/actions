@@ -4,6 +4,11 @@ version = "0.1.0"
 description = "Interface from GitHub Actions to the Circuit Breaker Labs Python client"
 readme = "README.md"
 requires-python = ">=3.13"
+authors = [
+    {name = "Arul Nigam", email = "arul@circuitbreakerlabs.ai"},
+    {name = "Shirali Nigam", email = "shirali@circuitbreakerlabs.ai"},
+    {name = "Wyatt Avilla", email = "wyatt@circuitbreakerlabs.ai"},
+]
 dependencies = [
     "circuit-breaker-labs>=1.0.4",
 ]
