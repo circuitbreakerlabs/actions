@@ -1,5 +1,5 @@
 {
-  description = "Circuit Breaker Labs Python GitHub action development environment";
+  description = "Circuit Breaker Labs GitHub action development environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
