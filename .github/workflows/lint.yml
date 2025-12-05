@@ -1,0 +1,67 @@
+name: Linting
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      python: ${{ steps.filter.outputs.python }}
+      nix: ${{ steps.filter.outputs.nix }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Detect changed file types
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            python:
+              - '**/*.py'
+              - '**/*.pyi'
+              - 'pyproject.toml'
+              - 'ruff.toml'
+              - '.ruff.toml'
+            nix:
+              - '**/*.nix'
+              - 'flake.nix'
+              - 'flake.lock'
+
+  python:
+    needs: detect_changes
+    if: needs.detect_changes.outputs.python == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run Ruff Linting Checks
+        uses: astral-sh/ruff-action@v3
+
+  nix:
+    needs: detect_changes
+    if: needs.detect_changes.outputs.nix == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - name: Check Nix Lints
+        run: |
+          nix run nixpkgs#statix -- check .
