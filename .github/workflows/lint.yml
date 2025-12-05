@@ -77,7 +77,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Run Zizmor
-        uses: zizmorcore/zizmor-action@v0.3
+        uses: zizmorcore/zizmor-action@v0.3.0
         with:
           persona: "pedantic"
           inputs: "*/"
