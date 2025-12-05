@@ -72,6 +72,8 @@ jobs:
           nix run nixpkgs#statix -- check .
 
   actions:
+    needs: detect_changes
+    if: needs.detect_changes.outputs.actions == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
