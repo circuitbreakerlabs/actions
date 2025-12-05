@@ -83,12 +83,14 @@ def get_cli_args() -> CommandLineArguments:
 def main() -> None:
     args = get_cli_args()
 
-    request = EvaluateSystemPromptRequest(
-        args.fail_case_threshold,
-        args.variations,
-        args.maximum_iteration_layers,
-        args.system_prompt,
-        args.openrouter_model_name,
+    request = EvaluateSystemPromptRequest.from_dict(
+        {
+            "threshold": args.fail_case_threshold,
+            "variations": args.variations,
+            "maximum_iteration_layers": args.maximum_iteration_layers,
+            "system_prompt": args.system_prompt,
+            "openrouter_model_name": args.openrouter_model_name,
+        },
     )
 
     client = Client(BASE_URL)
