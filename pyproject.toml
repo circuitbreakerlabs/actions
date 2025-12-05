@@ -15,6 +15,7 @@ dependencies = [
 
 [project.scripts]
 evaluate-system-prompt = "actions.evaluate_system_prompt:main"
+evaluate-openai-finetune = "actions.evaluate_openai_finetune:main"
 
 [project.optional-dependencies]
 dev = [
