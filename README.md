@@ -1,5 +1,9 @@
 # Circuit Breaker Labs GitHub Actions
 
+[![zizmor](https://img.shields.io/badge/Check-_?label=%F0%9F%8C%88%20zizmor)](https://github.com/circuitbreakerlabs/actions/actions/workflows/lint.yml)
+[![Ruff](https://img.shields.io/badge/Ruff-Check-34223D?logo=ruff)](https://github.com/circuitbreakerlabs/actions/actions/workflows/lint.yml)
+[![MyPy](https://img.shields.io/badge/Mypy-Check-blue?logo=python)](https://github.com/circuitbreakerlabs/actions/actions/workflows/type-checking.yml)
+
 GitHub actions utilizing the Circuit Breaker Labs API.
 
 ## Usage
