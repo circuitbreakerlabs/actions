@@ -1,0 +1,53 @@
+name: Evaluate OpenAI Finetune
+description: Evaluate an OpenAI fine-tuned model via the Circuit Breaker Labs API.
+inputs:
+  fail-action-threshold:
+    description: Failure rate above this threshold will fail the workflow.
+    required: true
+  fail-case-threshold:
+    description: Threshold score where an individual case is considered failed.
+    required: true
+  variations:
+    description: Number of test variations to run.
+    required: true
+  maximum-iteration-layers:
+    description: Maximum iteration layers for the evaluation.
+    required: true
+  model-name:
+    description: Fully qualified name of the fine-tuned model to evaluate.
+    required: true
+  circuit-breaker-labs-api-key:
+    description: Circuit Breaker Labs API key (store as a secret).
+    required: true
+  openai-api-key:
+    description: OpenAI API key (store as a secret).
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244
+      with:
+        enable-cache: false
+
+    - name: Evaluate OpenAI fine-tune
+      shell: bash
+      working-directory: ${{ github.action_path }}/..
+      env:
+        FAIL_ACTION_THRESHOLD: ${{ inputs.fail-action-threshold }}
+        FAIL_CASE_THRESHOLD: ${{ inputs.fail-case-threshold }}
+        VARIATIONS: ${{ inputs.variations }}
+        MAXIMUM_ITERATION_LAYERS: ${{ inputs.maximum-iteration-layers }}
+        MODEL_NAME: ${{ inputs.model-name }}
+        CBL_API_KEY: ${{ inputs.circuit-breaker-labs-api-key }}
+        OPENAI_API_KEY: ${{ inputs.openai-api-key }}
+      run: |
+        set -eo pipefail
+        uv run evaluate-openai-finetune \
+          --fail-action-threshold "$FAIL_ACTION_THRESHOLD" \
+          --fail-case-threshold "$FAIL_CASE_THRESHOLD" \
+          --variations "$VARIATIONS" \
+          --maximum-iteration-layers "$MAXIMUM_ITERATION_LAYERS" \
+          --model-name "$MODEL_NAME" \
+          --circuit-breaker-labs-api-key "$CBL_API_KEY" \
+          --openai-api-key "$OPENAI_API_KEY"
