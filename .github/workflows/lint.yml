@@ -40,7 +40,6 @@ jobs:
             actions:
               - '!(\.github/**)**/*.yml'
               - '!(\.github/**)**/*.yaml'
-          list-files: "json"
 
   python:
     needs: detect_changes
