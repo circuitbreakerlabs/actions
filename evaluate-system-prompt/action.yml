@@ -22,6 +22,7 @@ inputs:
   circuit-breaker-labs-api-key:
     description: Circuit Breaker Labs API key (store as a secret).
     required: true
+
 runs:
   using: composite
   steps:

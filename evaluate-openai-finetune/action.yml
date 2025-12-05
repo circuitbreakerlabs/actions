@@ -1,5 +1,6 @@
 name: Evaluate OpenAI Finetune
-description: Evaluate an OpenAI fine-tuned model via the Circuit Breaker Labs API.
+description:
+  Evaluate an OpenAI fine-tuned model via the Circuit Breaker Labs API.
 inputs:
   fail-action-threshold:
     description: Failure rate above this threshold will fail the workflow.
@@ -22,6 +23,7 @@ inputs:
   openai-api-key:
     description: OpenAI API key (store as a secret).
     required: true
+
 runs:
   using: composite
   steps:
