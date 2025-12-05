@@ -1,0 +1,69 @@
+name: Type Checking
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  detect_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      python: ${{ steps.filter.outputs.python }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Detect relevant changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            python:
+              - '**/*.py'
+              - '**/*.pyi'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'mypy.ini'
+              - 'ruff.toml'
+              - '.ruff.toml'
+              - '.gitmodules'
+
+  python:
+    needs: detect_changes
+    if:
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect_changes.outputs.python == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          activate-environment: true
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install Dependencies
+        run: |
+          uv pip install . && uv pip install ".[dev]"
+
+      - name: Install mypy
+        run: |
+          uv pip install mypy
+
+      - name: Run Mypy
+        run: uv run mypy --strict src
