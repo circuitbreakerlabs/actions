@@ -4,7 +4,8 @@
 [![Ruff](https://img.shields.io/badge/Ruff-Check-34223D?logo=ruff)](https://github.com/circuitbreakerlabs/actions/actions/workflows/lint.yml)
 [![MyPy](https://img.shields.io/badge/Mypy-Check-blue?logo=python)](https://github.com/circuitbreakerlabs/actions/actions/workflows/type-checking.yml)
 
-GitHub actions utilizing the Circuit Breaker Labs API.
+GitHub actions utilizing the Circuit Breaker Labs API through its
+[Python client](https://github.com/circuitbreakerlabs/circuitbreakerlabs-python).
 
 ## Usage
 
