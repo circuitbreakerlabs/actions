@@ -23,6 +23,7 @@
         dev = with pkgs; [
           ruff
           prettier
+          zizmor
         ];
       in
       {

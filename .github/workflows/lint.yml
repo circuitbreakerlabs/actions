@@ -16,6 +16,7 @@ jobs:
     outputs:
       python: ${{ steps.filter.outputs.python }}
       nix: ${{ steps.filter.outputs.nix }}
+      actions: ${{ steps.filter.outputs.actions }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -36,6 +37,10 @@ jobs:
               - '**/*.nix'
               - 'flake.nix'
               - 'flake.lock'
+            actions:
+              - '**/*.yml'
+              - '**/*.yaml'
+              - '!.github/**'
 
   python:
     needs: detect_changes
@@ -65,3 +70,13 @@ jobs:
       - name: Check Nix Lints
         run: |
           nix run nixpkgs#statix -- check .
+
+  actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Run Zizmor
+        uses: zizmorcore/zizmor-action@v0.3
+        persona: "pedantic"
+        inputs: "*/"
