@@ -80,4 +80,6 @@ jobs:
         uses: zizmorcore/zizmor-action@v0.3.0
         with:
           persona: "pedantic"
+          advanced-security: false
+          annotations: true
           inputs: "*/"
