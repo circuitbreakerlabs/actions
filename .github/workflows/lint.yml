@@ -38,9 +38,8 @@ jobs:
               - 'flake.nix'
               - 'flake.lock'
             actions:
-              - '**/*.yml'
-              - '**/*.yaml'
-              - '!.github/**'
+              - '!(\.github/**)**/*.yml'
+              - '!(\.github/**)**/*.yaml'
 
   python:
     needs: detect_changes
