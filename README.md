@@ -7,8 +7,6 @@
 GitHub actions utilizing the Circuit Breaker Labs API through its
 [Python client](https://github.com/circuitbreakerlabs/circuitbreakerlabs-python).
 
-test trigger
-
 ## Usage
 
 For the required inputs to each action, check the relevant `action.yml` file.
