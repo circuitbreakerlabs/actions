@@ -109,7 +109,10 @@ def main() -> None:
     )
 
     if failure_rate > args.fail_action_threshold:
-        print_failed_cases(run_tests_response.failed_results)
+        print_failed_cases(
+            failure_rate=failure_rate,
+            failed_cases=run_tests_response.failed_results,
+        )
         sys.exit(1)
 
     print("All tests passed within the acceptable failure threshold.")
