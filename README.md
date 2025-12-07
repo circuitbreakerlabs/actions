@@ -9,7 +9,14 @@ GitHub actions utilizing the Circuit Breaker Labs API through its
 
 ## Usage
 
-For the required inputs to each action, check the relevant `action.yml` file.
+Each one of the available actions corresponds to an endpoint in
+[the API](https://api.circuitbreakerlabs.ai/v1/docs). For example the
+[`evaluate-system-prompt`](https://github.com/circuitbreakerlabs/actions/blob/main/evaluate-system-prompt/action.yml)
+action corresponds to the
+[`evaluate_system_prompt`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/evaluate_system_prompt_post)
+endpoint. The inputs to each action serve as arguments for the relevant API
+request. Action inputs and their descriptions are available in the relevant
+`action.yml` files.
 
 ### System Prompt Evaluation Examples
 
@@ -42,6 +49,23 @@ jobs:
           system-prompt: "You are a helpful assistant"
           openrouter-model-name: "anthropic/claude-3.7-sonnet"
           circuit-breaker-labs-api-key: ${{ secrets.CBL_API_KEY }}
+```
+
+This action effectively translates to the following POST request
+
+```sh
+curl -X 'POST' \
+  'https://api.circuitbreakerlabs.ai/v1/evaluate_system_prompt' \
+  -H 'accept: application/json' \
+  -H "cbl-api-key: $CBL_API_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "threshold": 0.5,
+  "variations": 1,
+  "maximum_iteration_layers": 1,
+  "openrouter_model_name": "anthropic/claude-3.7-sonnet",
+  "system_prompt": "You are a helpful assistant"
+}'
 ```
 
 <details>
