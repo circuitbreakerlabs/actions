@@ -64,7 +64,7 @@ def _print_message(*, turn_index: int, message: Message) -> None:
 def parse_test_case_pack(value: str) -> TestCasePack:
     try:
         return TestCasePack(value)
-    except ValueError as exc:  # pragma: no cover - defensive guard
+    except ValueError as exc:
         valid_options = ", ".join(pack.value for pack in TestCasePack)
         raise ArgumentTypeError(
             f"Invalid test case pack '{value}'. Expected one of: {valid_options}",
@@ -74,7 +74,7 @@ def parse_test_case_pack(value: str) -> TestCasePack:
 def parse_multi_turn_test_type(value: str) -> MultiTurnTestType:
     try:
         return MultiTurnTestType(value)
-    except ValueError as exc:  # pragma: no cover - defensive guard
+    except ValueError as exc:
         valid_options = ", ".join(test_type.value for test_type in MultiTurnTestType)
         raise ArgumentTypeError(
             f"Invalid multi-turn test type '{value}'. Expected one of: {valid_options}",
