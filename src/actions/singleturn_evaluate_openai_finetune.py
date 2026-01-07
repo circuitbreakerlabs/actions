@@ -2,12 +2,16 @@ import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass
 
-from circuit_breaker_labs.api.evaluations import single_turn_evaluate_openai_fine_tune_post
+from circuit_breaker_labs.api.evaluations import (
+    single_turn_evaluate_openai_fine_tune_post,
+)
 from circuit_breaker_labs.client import Client
 from circuit_breaker_labs.models.single_turn_evaluate_open_ai_finetune_request import (
     SingleTurnEvaluateOpenAiFinetuneRequest,
 )
-from circuit_breaker_labs.models.single_turn_run_tests_response import SingleTurnRunTestsResponse
+from circuit_breaker_labs.models.single_turn_run_tests_response import (
+    SingleTurnRunTestsResponse,
+)
 from circuit_breaker_labs.models.test_case_pack import TestCasePack
 from circuit_breaker_labs.types import UNSET
 
@@ -106,7 +110,9 @@ def main() -> None:
         variations=args.variations,
         maximum_iteration_layers=args.maximum_iteration_layers,
         model_name=args.model_name,
-        test_case_packs=args.test_case_packs if args.test_case_packs is not None else UNSET,
+        test_case_packs=args.test_case_packs
+        if args.test_case_packs is not None
+        else UNSET,
     )
 
     client = Client(BASE_URL)

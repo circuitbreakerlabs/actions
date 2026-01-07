@@ -7,7 +7,9 @@ from circuit_breaker_labs.client import Client
 from circuit_breaker_labs.models.multi_turn_evaluate_system_prompt_request import (
     MultiTurnEvaluateSystemPromptRequest,
 )
-from circuit_breaker_labs.models.multi_turn_run_tests_response import MultiTurnRunTestsResponse
+from circuit_breaker_labs.models.multi_turn_run_tests_response import (
+    MultiTurnRunTestsResponse,
+)
 from circuit_breaker_labs.models.multi_turn_test_type import MultiTurnTestType
 from circuit_breaker_labs.models.test_case_pack import TestCasePack
 from circuit_breaker_labs.types import UNSET
@@ -113,7 +115,9 @@ def main() -> None:
         test_types=args.test_types,
         system_prompt=args.system_prompt,
         openrouter_model_name=args.openrouter_model_name,
-        test_case_packs=args.test_case_packs if args.test_case_packs is not None else UNSET,
+        test_case_packs=args.test_case_packs
+        if args.test_case_packs is not None
+        else UNSET,
     )
 
     client = Client(BASE_URL)

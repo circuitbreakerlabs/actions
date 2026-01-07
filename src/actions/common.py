@@ -4,9 +4,13 @@ from argparse import ArgumentTypeError
 from collections.abc import Iterable
 
 from circuit_breaker_labs.models.message import Message
-from circuit_breaker_labs.models.multi_turn_failed_test_result import MultiTurnFailedTestResult
+from circuit_breaker_labs.models.multi_turn_failed_test_result import (
+    MultiTurnFailedTestResult,
+)
 from circuit_breaker_labs.models.multi_turn_test_type import MultiTurnTestType
-from circuit_breaker_labs.models.single_turn_failed_test_result import SingleTurnFailedTestResult
+from circuit_breaker_labs.models.single_turn_failed_test_result import (
+    SingleTurnFailedTestResult,
+)
 from circuit_breaker_labs.models.test_case_pack import TestCasePack
 
 BASE_URL = "https://api.circuitbreakerlabs.ai/v1/"
