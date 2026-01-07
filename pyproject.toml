@@ -10,12 +10,14 @@ authors = [
     {name = "Wyatt Avilla", email = "wyatt@circuitbreakerlabs.ai"},
 ]
 dependencies = [
-    "circuit-breaker-labs==1.0.5",
+    "circuit-breaker-labs==1.0.6",
 ]
 
 [project.scripts]
-evaluate-system-prompt = "actions.evaluate_system_prompt:main"
-evaluate-openai-finetune = "actions.evaluate_openai_finetune:main"
+singleturn-evaluate-system-prompt = "actions.singleturn_evaluate_system_prompt:main"
+singleturn-evaluate-openai-finetune = "actions.singleturn_evaluate_openai_finetune:main"
+multiturn-evaluate-system-prompt = "actions.multiturn_evaluate_system_prompt:main"
+multiturn-evaluate-openai-finetune = "actions.multiturn_evaluate_openai_finetune:main"
 
 [project.optional-dependencies]
 dev = [

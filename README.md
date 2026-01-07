@@ -9,21 +9,30 @@ GitHub actions utilizing the Circuit Breaker Labs API through its
 
 ## Usage
 
-Each one of the available actions corresponds to an endpoint in
-[the API](https://api.circuitbreakerlabs.ai/v1/docs). For example the
-[`evaluate-system-prompt`](https://github.com/circuitbreakerlabs/actions/blob/main/evaluate-system-prompt/action.yml)
-action corresponds to the
-[`evaluate_system_prompt`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/evaluate_system_prompt_post)
-endpoint. The inputs to each action serve as arguments for the relevant API
-request. Action inputs and their descriptions are available in the relevant
+Each action in this repository maps directly to one of the four primary
+evaluation endpoints exposed by
+[the API](https://api.circuitbreakerlabs.ai/v1/docs):
+
+- [`singleturn-evaluate-system-prompt`](https://github.com/circuitbreakerlabs/actions/blob/main/singleturn-evaluate-system-prompt/action.yml)
+  &rarr; [`/singleturn_evaluate_system_prompt`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/singleturn_evaluate_system_prompt_post)
+- [`singleturn-evaluate-openai-finetune`](https://github.com/circuitbreakerlabs/actions/blob/main/singleturn-evaluate-openai-finetune/action.yml)
+  &rarr; [`/singleturn_evaluate_openai_finetune`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/singleturn_evaluate_openai_finetune_post)
+- [`multiturn-evaluate-system-prompt`](https://github.com/circuitbreakerlabs/actions/blob/main/multiturn-evaluate-system-prompt/action.yml)
+  &rarr; [`/multiturn_evaluate_system_prompt`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/multiturn_evaluate_system_prompt_post)
+- [`multiturn-evaluate-openai-finetune`](https://github.com/circuitbreakerlabs/actions/blob/main/multiturn-evaluate-openai-finetune/action.yml)
+  &rarr; [`/multiturn_evaluate_openai_finetune`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/multiturn_evaluate_openai_finetune_post)
+
+The inputs to each action serve as arguments for the relevant API request.
+Action inputs and their descriptions are available in the corresponding
 `action.yml` files.
 
 ### System Prompt Evaluation Examples
 
 Here, we're using the
-[`evaluate-system-prompt`](https://github.com/circuitbreakerlabs/actions/blob/main/evaluate-system-prompt/action.yml)
-action, which calls its
-[associated endpoint](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/evaluate_system_prompt_post).
+[`singleturn-evaluate-system-prompt`](https://github.com/circuitbreakerlabs/actions/blob/main/singleturn-evaluate-system-prompt/action.yml)
+action, which calls the
+[`/singleturn_evaluate_system_prompt`](https://api.circuitbreakerlabs.ai/v1/docs#tag/Evaluations/operation/singleturn_evaluate_system_prompt_post)
+endpoint.
 
 ```yml
 name: Evaluate System Prompt
@@ -40,7 +49,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run system prompt evaluation
-        uses: circuitbreakerlabs/actions/evaluate-system-prompt@v1
+        uses: circuitbreakerlabs/actions/singleturn-evaluate-system-prompt@v1
         with:
           fail-action-threshold: "0.80"
           fail-case-threshold: "0.5"
@@ -55,7 +64,7 @@ This action effectively translates to the following POST request
 
 ```sh
 curl -X 'POST' \
-  'https://api.circuitbreakerlabs.ai/v1/evaluate_system_prompt' \
+  'https://api.circuitbreakerlabs.ai/v1/singleturn_evaluate_system_prompt' \
   -H 'accept: application/json' \
   -H "cbl-api-key: $CBL_API_KEY" \
   -H 'Content-Type: application/json' \
@@ -102,7 +111,7 @@ jobs:
           echo "model=$MODEL" >> $GITHUB_OUTPUT
 
       - name: Run system prompt evaluation
-        uses: circuitbreakerlabs/actions/evaluate-system-prompt@main
+        uses: circuitbreakerlabs/actions/singleturn-evaluate-system-prompt@main
         with:
           fail-action-threshold: "0.80"
           fail-case-threshold: "0.5"

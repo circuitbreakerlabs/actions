@@ -1,6 +1,6 @@
-name: Evaluate OpenAI Finetune
+name: Evaluate Multi-Turn OpenAI Fine-Tune
 description:
-  Evaluate an OpenAI fine-tuned model via the Circuit Breaker Labs API.
+  Evaluate an OpenAI fine-tuned model via the multi-turn Circuit Breaker Labs API.
 inputs:
   fail-action-threshold:
     description: Failure rate above this threshold will fail the workflow.
@@ -8,11 +8,11 @@ inputs:
   fail-case-threshold:
     description: Threshold score where an individual case is considered failed.
     required: true
-  variations:
-    description: Number of test variations to run.
+  max-turns:
+    description: Maximum number of turns in the conversation (must be even).
     required: true
-  maximum-iteration-layers:
-    description: Maximum iteration layers for the evaluation.
+  test-types:
+    description: Space-separated list of multi-turn test types to execute.
     required: true
   model-name:
     description: Fully qualified name of the fine-tuned model to evaluate.
@@ -23,6 +23,9 @@ inputs:
   openai-api-key:
     description: OpenAI API key (store as a secret).
     required: true
+  test-case-packs:
+    description: Optional space-separated list of test case packs to run.
+    required: false
 
 runs:
   using: composite
@@ -32,24 +35,33 @@ runs:
       with:
         enable-cache: false
 
-    - name: Evaluate OpenAI fine-tune
+    - name: Evaluate multi-turn OpenAI fine-tune
       shell: bash
       working-directory: ${{ github.action_path }}/..
       env:
         FAIL_ACTION_THRESHOLD: ${{ inputs.fail-action-threshold }}
         FAIL_CASE_THRESHOLD: ${{ inputs.fail-case-threshold }}
-        VARIATIONS: ${{ inputs.variations }}
-        MAXIMUM_ITERATION_LAYERS: ${{ inputs.maximum-iteration-layers }}
+        MAX_TURNS: ${{ inputs.max-turns }}
+        TEST_TYPES: ${{ inputs.test-types }}
         MODEL_NAME: ${{ inputs.model-name }}
         CBL_API_KEY: ${{ inputs.circuit-breaker-labs-api-key }}
         OPENAI_API_KEY: ${{ inputs.openai-api-key }}
+        TEST_CASE_PACKS: ${{ inputs.test-case-packs }}
       run: |
         set -eo pipefail
-        uv run evaluate-openai-finetune \
-          --fail-action-threshold "$FAIL_ACTION_THRESHOLD" \
-          --fail-case-threshold "$FAIL_CASE_THRESHOLD" \
-          --variations "$VARIATIONS" \
-          --maximum-iteration-layers "$MAXIMUM_ITERATION_LAYERS" \
-          --model-name "$MODEL_NAME" \
-          --circuit-breaker-labs-api-key "$CBL_API_KEY" \
+        ARGS=(
+          --fail-action-threshold "$FAIL_ACTION_THRESHOLD"
+          --fail-case-threshold "$FAIL_CASE_THRESHOLD"
+          --max-turns "$MAX_TURNS"
+          --model-name "$MODEL_NAME"
+          --circuit-breaker-labs-api-key "$CBL_API_KEY"
           --openai-api-key "$OPENAI_API_KEY"
+        )
+
+        ARGS+=(--test-types $TEST_TYPES)
+
+        if [ -n "$TEST_CASE_PACKS" ]; then
+          ARGS+=(--test-case-packs $TEST_CASE_PACKS)
+        fi
+
+        uv run multiturn-evaluate-openai-finetune "${ARGS[@]}"

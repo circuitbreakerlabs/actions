@@ -18,7 +18,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "circuit-breaker-labs", specifier = "==1.0.5" },
+    { name = "circuit-breaker-labs", specifier = "==1.0.6" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.7" },
 ]
@@ -56,7 +56,7 @@ wheels = [
 
 [[package]]
 name = "circuit-breaker-labs"
-version = "1.0.5"
+version = "1.0.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "attrs" },
@@ -64,9 +64,9 @@ dependencies = [
     { name = "python-dateutil" },
     { name = "types-python-dateutil" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/53/62/6f5dff70a51bf16dd4b87a79d8271eb7c5396bdbf37e7fe1e050b159ff50/circuit_breaker_labs-1.0.5.tar.gz", hash = "sha256:1632acd3f2fb8e645e55fb809aab84503cd8f8f8f26b09b4e8292730da9b9737", size = 11491, upload-time = "2025-12-05T20:17:51.07Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3b/07/fc10b27ca32e26140f4df4edb048e173682f7825ab35acf3ba23369bd9cf/circuit_breaker_labs-1.0.6.tar.gz", hash = "sha256:f917c287a28398e766237155f275e93c61199291ba4e507344bc9abd45bb661a", size = 13954, upload-time = "2026-01-07T00:49:28.663Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/d7/36fba7dce3965f673b21e031df9003a1bed4d73da40b5b8810c661fb872a/circuit_breaker_labs-1.0.5-py3-none-any.whl", hash = "sha256:04eee3db17c413425f7604cb980d97cff24526c45af758d09ba334f3f474049b", size = 32206, upload-time = "2025-12-05T20:17:49.804Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/03/e8f4ba3f6ab6857625ac0f6f21bd5303eeb3077e21b629615fd89949b028/circuit_breaker_labs-1.0.6-py3-none-any.whl", hash = "sha256:c2d860570b47635bc725725f50b7ee6601fd333d2ad62a96c76234f7cae29ab6", size = 43135, upload-time = "2026-01-07T00:49:27.083Z" },
 ]
 
 [[package]]
