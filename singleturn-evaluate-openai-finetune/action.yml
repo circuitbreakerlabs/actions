@@ -1,5 +1,6 @@
-name: Evaluate System Prompt
-description: Evaluate a system prompt via the Circuit Breaker Labs API.
+name: Evaluate Single-Turn OpenAI Fine-Tune
+description:
+  Evaluate an OpenAI fine-tuned model via the single-turn Circuit Breaker Labs API.
 inputs:
   fail-action-threshold:
     description: Failure rate above this threshold will fail the workflow.
@@ -13,15 +14,18 @@ inputs:
   maximum-iteration-layers:
     description: Maximum iteration layers for the evaluation.
     required: true
-  system-prompt:
-    description: System prompt text to evaluate.
-    required: true
-  openrouter-model-name:
-    description: OpenRouter model name to evaluate against.
+  model-name:
+    description: Fully qualified name of the fine-tuned model to evaluate.
     required: true
   circuit-breaker-labs-api-key:
     description: Circuit Breaker Labs API key (store as a secret).
     required: true
+  openai-api-key:
+    description: OpenAI API key (store as a secret).
+    required: true
+  test-case-packs:
+    description: Optional space-separated list of test case packs to run.
+    required: false
 
 runs:
   using: composite
@@ -31,7 +35,7 @@ runs:
       with:
         enable-cache: false
 
-    - name: Evaluate system prompt
+    - name: Evaluate OpenAI fine-tune
       shell: bash
       working-directory: ${{ github.action_path }}/..
       env:
@@ -39,16 +43,24 @@ runs:
         FAIL_CASE_THRESHOLD: ${{ inputs.fail-case-threshold }}
         VARIATIONS: ${{ inputs.variations }}
         MAXIMUM_ITERATION_LAYERS: ${{ inputs.maximum-iteration-layers }}
-        SYSTEM_PROMPT: ${{ inputs.system-prompt }}
-        OPENROUTER_MODEL_NAME: ${{ inputs.openrouter-model-name }}
+        MODEL_NAME: ${{ inputs.model-name }}
         CBL_API_KEY: ${{ inputs.circuit-breaker-labs-api-key }}
+        OPENAI_API_KEY: ${{ inputs.openai-api-key }}
+        TEST_CASE_PACKS: ${{ inputs.test-case-packs }}
       run: |
         set -eo pipefail
-        uv run evaluate-system-prompt \
-          --fail-action-threshold "$FAIL_ACTION_THRESHOLD" \
-          --fail-case-threshold "$FAIL_CASE_THRESHOLD" \
-          --variations "$VARIATIONS" \
-          --maximum-iteration-layers "$MAXIMUM_ITERATION_LAYERS" \
-          --system-prompt "$SYSTEM_PROMPT" \
-          --openrouter-model-name "$OPENROUTER_MODEL_NAME" \
+        ARGS=(
+          --fail-action-threshold "$FAIL_ACTION_THRESHOLD"
+          --fail-case-threshold "$FAIL_CASE_THRESHOLD"
+          --variations "$VARIATIONS"
+          --maximum-iteration-layers "$MAXIMUM_ITERATION_LAYERS"
+          --model-name "$MODEL_NAME"
           --circuit-breaker-labs-api-key "$CBL_API_KEY"
+          --openai-api-key "$OPENAI_API_KEY"
+        )
+
+        if [ -n "$TEST_CASE_PACKS" ]; then
+          ARGS+=(--test-case-packs $TEST_CASE_PACKS)
+        fi
+
+        uv run singleturn-evaluate-openai-finetune "${ARGS[@]}"
