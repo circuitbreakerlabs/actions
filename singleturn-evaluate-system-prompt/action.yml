@@ -22,8 +22,8 @@ inputs:
   circuit-breaker-labs-api-key:
     description: Circuit Breaker Labs API key (store as a secret).
     required: true
-  test-case-packs:
-    description: Optional space-separated list of test case packs to run.
+  test-case-groups:
+    description: Optional space-separated list of test case groups to run.
     required: false
 
 runs:
@@ -45,7 +45,7 @@ runs:
         SYSTEM_PROMPT: ${{ inputs.system-prompt }}
         OPENROUTER_MODEL_NAME: ${{ inputs.openrouter-model-name }}
         CBL_API_KEY: ${{ inputs.circuit-breaker-labs-api-key }}
-        TEST_CASE_PACKS: ${{ inputs.test-case-packs }}
+        TEST_CASE_GROUPS: ${{ inputs.test-case-groups }}
       run: |
         set -eo pipefail
         ARGS=(
@@ -58,8 +58,8 @@ runs:
           --circuit-breaker-labs-api-key "$CBL_API_KEY"
         )
 
-        if [ -n "$TEST_CASE_PACKS" ]; then
-          ARGS+=(--test-case-packs $TEST_CASE_PACKS)
+        if [ -n "$TEST_CASE_GROUPS" ]; then
+          ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
         fi
 
         uv run singleturn-evaluate-system-prompt "${ARGS[@]}"

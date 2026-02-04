@@ -13,14 +13,14 @@ from circuit_breaker_labs.models.multi_turn_run_tests_response import (
     MultiTurnRunTestsResponse,
 )
 from circuit_breaker_labs.models.multi_turn_test_type import MultiTurnTestType
-from circuit_breaker_labs.models.test_case_pack import TestCasePack
+from circuit_breaker_labs.models.test_case_group import TestCaseGroup
 from circuit_breaker_labs.types import UNSET
 
 from .common import (
     BASE_URL,
     compute_failure_rate,
     parse_multi_turn_test_type,
-    parse_test_case_pack,
+    parse_test_case_group,
     print_multi_turn_failed_cases,
 )
 
@@ -34,7 +34,7 @@ class CommandLineArguments:
     circuit_breaker_labs_api_key: str
     openai_api_key: str
     test_types: list[MultiTurnTestType]
-    test_case_packs: list[TestCasePack] | None
+    test_case_groups: list[TestCaseGroup | str] | None
 
 
 def get_cli_args() -> CommandLineArguments:
@@ -86,10 +86,10 @@ def get_cli_args() -> CommandLineArguments:
         help="OpenAI API key",
     )
     parser.add_argument(
-        "--test-case-packs",
-        type=parse_test_case_pack,
+        "--test-case-groups",
+        type=parse_test_case_group,
         nargs="+",
-        help="Optional test case packs to run (space-separated).",
+        help="Optional test case groups to run (space-separated).",
     )
 
     args = parser.parse_args()
@@ -104,7 +104,7 @@ def get_cli_args() -> CommandLineArguments:
         circuit_breaker_labs_api_key=args.circuit_breaker_labs_api_key,
         openai_api_key=args.openai_api_key,
         test_types=args.test_types,
-        test_case_packs=args.test_case_packs,
+        test_case_groups=args.test_case_groups,
     )
 
 
@@ -116,8 +116,8 @@ def main() -> None:
         max_turns=args.max_turns,
         test_types=args.test_types,
         model_name=args.model_name,
-        test_case_packs=args.test_case_packs
-        if args.test_case_packs is not None
+        test_case_groups=args.test_case_groups
+        if args.test_case_groups is not None
         else UNSET,
     )
 

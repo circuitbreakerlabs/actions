@@ -11,7 +11,7 @@ from circuit_breaker_labs.models.multi_turn_test_type import MultiTurnTestType
 from circuit_breaker_labs.models.single_turn_failed_test_result import (
     SingleTurnFailedTestResult,
 )
-from circuit_breaker_labs.models.test_case_pack import TestCasePack
+from circuit_breaker_labs.models.test_case_group import TestCaseGroup
 
 BASE_URL = "https://api.circuitbreakerlabs.ai/v1/"
 
@@ -61,14 +61,12 @@ def _print_message(*, turn_index: int, message: Message) -> None:
     print(f"        [{turn_index}] {role}: {content}")
 
 
-def parse_test_case_pack(value: str) -> TestCasePack:
+def parse_test_case_group(value: str) -> TestCaseGroup | str:
     try:
-        return TestCasePack(value)
-    except ValueError as exc:
-        valid_options = ", ".join(pack.value for pack in TestCasePack)
-        raise ArgumentTypeError(
-            f"Invalid test case pack '{value}'. Expected one of: {valid_options}",
-        ) from exc
+        return TestCaseGroup(value)
+    except ValueError:
+        # If not a valid enum value, treat it as a custom string
+        return value
 
 
 def parse_multi_turn_test_type(value: str) -> MultiTurnTestType:
