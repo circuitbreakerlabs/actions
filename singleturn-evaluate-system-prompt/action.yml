@@ -23,14 +23,14 @@ inputs:
     description: Circuit Breaker Labs API key (store as a secret).
     required: true
   test-case-groups:
-    description: Optional space-separated list of test case groups to run.
-    required: false
+    description: Space-separated list of test case groups to run.
+    required: true
 
 runs:
   using: composite
   steps:
     - name: Install uv
-      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244
+      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
       with:
         enable-cache: false
 
@@ -58,8 +58,6 @@ runs:
           --circuit-breaker-labs-api-key "$CBL_API_KEY"
         )
 
-        if [ -n "$TEST_CASE_GROUPS" ]; then
-          ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
-        fi
+        ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
 
         uv run singleturn-evaluate-system-prompt "${ARGS[@]}"

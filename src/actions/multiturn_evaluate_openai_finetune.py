@@ -9,17 +9,13 @@ from circuit_breaker_labs.client import Client
 from circuit_breaker_labs.models.multi_turn_evaluate_open_ai_finetune_request import (
     MultiTurnEvaluateOpenAiFinetuneRequest,
 )
-from circuit_breaker_labs.models.multi_turn_run_tests_response import (
-    MultiTurnRunTestsResponse,
+from circuit_breaker_labs.models.multi_turn_response import (
+    MultiTurnResponse,
 )
-from circuit_breaker_labs.models.multi_turn_test_type import MultiTurnTestType
-from circuit_breaker_labs.models.test_case_group import TestCaseGroup
-from circuit_breaker_labs.types import UNSET
 
 from .common import (
     BASE_URL,
     compute_failure_rate,
-    parse_multi_turn_test_type,
     parse_test_case_group,
     print_multi_turn_failed_cases,
 )
@@ -33,8 +29,7 @@ class CommandLineArguments:
     model_name: str
     circuit_breaker_labs_api_key: str
     openai_api_key: str
-    test_types: list[MultiTurnTestType]
-    test_case_groups: list[TestCaseGroup | str] | None
+    test_case_groups: list[str]
 
 
 def get_cli_args() -> CommandLineArguments:
@@ -61,13 +56,6 @@ def get_cli_args() -> CommandLineArguments:
         help="Maximum number of turns in the conversation (must be even).",
     )
     parser.add_argument(
-        "--test-types",
-        type=parse_multi_turn_test_type,
-        nargs="+",
-        required=True,
-        help="Space-separated list of multi-turn test types to execute.",
-    )
-    parser.add_argument(
         "--model-name",
         type=str,
         required=True,
@@ -89,7 +77,8 @@ def get_cli_args() -> CommandLineArguments:
         "--test-case-groups",
         type=parse_test_case_group,
         nargs="+",
-        help="Optional test case groups to run (space-separated).",
+        required=True,
+        help="Test case groups to run (space-separated).",
     )
 
     args = parser.parse_args()
@@ -103,7 +92,6 @@ def get_cli_args() -> CommandLineArguments:
         model_name=args.model_name,
         circuit_breaker_labs_api_key=args.circuit_breaker_labs_api_key,
         openai_api_key=args.openai_api_key,
-        test_types=args.test_types,
         test_case_groups=args.test_case_groups,
     )
 
@@ -114,11 +102,8 @@ def main() -> None:
     request = MultiTurnEvaluateOpenAiFinetuneRequest(
         threshold=args.fail_case_threshold,
         max_turns=args.max_turns,
-        test_types=args.test_types,
         model_name=args.model_name,
-        test_case_groups=args.test_case_groups
-        if args.test_case_groups is not None
-        else UNSET,
+        test_case_groups=args.test_case_groups,
     )
 
     client = Client(BASE_URL)
@@ -132,7 +117,7 @@ def main() -> None:
 
     if not isinstance(
         (run_tests_response := response.parsed),
-        MultiTurnRunTestsResponse,
+        MultiTurnResponse,
     ):
         print(f"Error: {response.status_code}")
         print(response.content.decode())

@@ -11,9 +11,6 @@ inputs:
   max-turns:
     description: Maximum number of turns in the conversation (must be even).
     required: true
-  test-types:
-    description: Space-separated list of multi-turn test types to execute.
-    required: true
   model-name:
     description: Fully qualified name of the fine-tuned model to evaluate.
     required: true
@@ -24,14 +21,14 @@ inputs:
     description: OpenAI API key (store as a secret).
     required: true
   test-case-groups:
-    description: Optional space-separated list of test case groups to run.
-    required: false
+    description: Space-separated list of test case groups to run.
+    required: true
 
 runs:
   using: composite
   steps:
     - name: Install uv
-      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244
+      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
       with:
         enable-cache: false
 
@@ -42,7 +39,6 @@ runs:
         FAIL_ACTION_THRESHOLD: ${{ inputs.fail-action-threshold }}
         FAIL_CASE_THRESHOLD: ${{ inputs.fail-case-threshold }}
         MAX_TURNS: ${{ inputs.max-turns }}
-        TEST_TYPES: ${{ inputs.test-types }}
         MODEL_NAME: ${{ inputs.model-name }}
         CBL_API_KEY: ${{ inputs.circuit-breaker-labs-api-key }}
         OPENAI_API_KEY: ${{ inputs.openai-api-key }}
@@ -58,10 +54,6 @@ runs:
           --openai-api-key "$OPENAI_API_KEY"
         )
 
-        ARGS+=(--test-types $TEST_TYPES)
-
-        if [ -n "$TEST_CASE_GROUPS" ]; then
-          ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
-        fi
+        ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
 
         uv run multiturn-evaluate-openai-finetune "${ARGS[@]}"
