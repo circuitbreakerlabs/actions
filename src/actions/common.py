@@ -4,14 +4,12 @@ from argparse import ArgumentTypeError
 from collections.abc import Iterable
 
 from circuit_breaker_labs.models.message import Message
-from circuit_breaker_labs.models.multi_turn_failed_test_result import (
-    MultiTurnFailedTestResult,
+from circuit_breaker_labs.models.failed_multi_turn_result import (
+    FailedMultiTurnResult,
 )
-from circuit_breaker_labs.models.multi_turn_test_type import MultiTurnTestType
-from circuit_breaker_labs.models.single_turn_failed_test_result import (
-    SingleTurnFailedTestResult,
+from circuit_breaker_labs.models.failed_single_turn_result import (
+    FailedSingleTurnResult,
 )
-from circuit_breaker_labs.models.test_case_group import TestCaseGroup
 
 BASE_URL = "https://api.circuitbreakerlabs.ai/v1/"
 
@@ -26,7 +24,7 @@ def compute_failure_rate(*, total_passed: int, total_failed: int) -> float:
 def print_single_turn_failed_cases(
     *,
     failure_rate: float,
-    failed_cases: Iterable[Iterable[SingleTurnFailedTestResult]],
+    failed_cases: Iterable[Iterable[FailedSingleTurnResult]],
 ) -> None:
     print(f"Overall Failure Rate: {failure_rate:.2%}\n")
     for layer_index, cases in enumerate(failed_cases):
@@ -42,7 +40,7 @@ def print_single_turn_failed_cases(
 def print_multi_turn_failed_cases(
     *,
     failure_rate: float,
-    failed_cases: Iterable[MultiTurnFailedTestResult],
+    failed_cases: Iterable[FailedMultiTurnResult],
 ) -> None:
     print(f"Overall Failure Rate: {failure_rate:.2%}\n")
     for case_index, case in enumerate(failed_cases, start=1):
@@ -61,19 +59,7 @@ def _print_message(*, turn_index: int, message: Message) -> None:
     print(f"        [{turn_index}] {role}: {content}")
 
 
-def parse_test_case_group(value: str) -> TestCaseGroup | str:
-    try:
-        return TestCaseGroup(value)
-    except ValueError:
-        # If not a valid enum value, treat it as a custom string
-        return value
-
-
-def parse_multi_turn_test_type(value: str) -> MultiTurnTestType:
-    try:
-        return MultiTurnTestType(value)
-    except ValueError as exc:
-        valid_options = ", ".join(test_type.value for test_type in MultiTurnTestType)
-        raise ArgumentTypeError(
-            f"Invalid multi-turn test type '{value}'. Expected one of: {valid_options}",
-        ) from exc
+def parse_test_case_group(value: str) -> str:
+    if not value:
+        raise ArgumentTypeError("Test case group names must not be empty.")
+    return value

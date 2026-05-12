@@ -7,11 +7,9 @@ from circuit_breaker_labs.client import Client
 from circuit_breaker_labs.models.single_turn_evaluate_system_prompt_request import (
     SingleTurnEvaluateSystemPromptRequest,
 )
-from circuit_breaker_labs.models.single_turn_run_tests_response import (
-    SingleTurnRunTestsResponse,
+from circuit_breaker_labs.models.single_turn_response import (
+    SingleTurnResponse,
 )
-from circuit_breaker_labs.models.test_case_group import TestCaseGroup
-from circuit_breaker_labs.types import UNSET
 
 from .common import (
     BASE_URL,
@@ -30,7 +28,7 @@ class CommandLineArguments:
     system_prompt: str
     openrouter_model_name: str
     circuit_breaker_labs_api_key: str
-    test_case_groups: list[TestCaseGroup | str] | None
+    test_case_groups: list[str]
 
 
 def get_cli_args() -> CommandLineArguments:
@@ -84,7 +82,8 @@ def get_cli_args() -> CommandLineArguments:
         "--test-case-groups",
         type=parse_test_case_group,
         nargs="+",
-        help="Optional test case groups to run (space-separated).",
+        required=True,
+        help="Test case groups to run (space-separated).",
     )
 
     args = parser.parse_args()
@@ -107,11 +106,9 @@ def main() -> None:
         threshold=args.fail_case_threshold,
         variations=args.variations,
         maximum_iteration_layers=args.maximum_iteration_layers,
+        test_case_groups=args.test_case_groups,
         system_prompt=args.system_prompt,
         openrouter_model_name=args.openrouter_model_name,
-        test_case_groups=args.test_case_groups
-        if args.test_case_groups is not None
-        else UNSET,
     )
 
     client = Client(BASE_URL)
@@ -124,7 +121,7 @@ def main() -> None:
 
     if not isinstance(
         (run_tests_response := response.parsed),
-        SingleTurnRunTestsResponse,
+        SingleTurnResponse,
     ):
         print(f"Error: {response.status_code}")
         print(response.content.decode())
