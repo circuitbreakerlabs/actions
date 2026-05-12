@@ -24,8 +24,8 @@ inputs:
     description: OpenAI API key (store as a secret).
     required: true
   test-case-groups:
-    description: Optional space-separated list of test case groups to run.
-    required: false
+    description: Space-separated list of test case groups to run.
+    required: true
 
 runs:
   using: composite
@@ -59,8 +59,6 @@ runs:
           --openai-api-key "$OPENAI_API_KEY"
         )
 
-        if [ -n "$TEST_CASE_GROUPS" ]; then
-          ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
-        fi
+        ARGS+=(--test-case-groups $TEST_CASE_GROUPS)
 
         uv run singleturn-evaluate-openai-finetune "${ARGS[@]}"
