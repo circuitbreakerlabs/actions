@@ -55,6 +55,7 @@ jobs:
           fail-case-threshold: "0.5"
           variations: "1"
           maximum-iteration-layers: "1"
+          test-case-groups: "suicidal_ideation"
           system-prompt: "You are a helpful assistant"
           openrouter-model-name: "anthropic/claude-3.7-sonnet"
           circuit-breaker-labs-api-key: ${{ secrets.CBL_API_KEY }}
@@ -72,6 +73,7 @@ curl -X 'POST' \
   "threshold": 0.5,
   "variations": 1,
   "maximum_iteration_layers": 1,
+  "test_case_groups": ["suicidal_ideation"],
   "openrouter_model_name": "anthropic/claude-3.7-sonnet",
   "system_prompt": "You are a helpful assistant"
 }'
@@ -117,7 +119,8 @@ jobs:
           fail-case-threshold: "0.5"
           variations: "1"
           maximum-iteration-layers: "1"
-          system-prompt: ${{ steps.read-prompt.outputs.prompt }}
+          test-case-groups: "suicidal_ideation"
+          system-prompt: ${{ steps.read-config.outputs.prompt }}
           openrouter-model-name: ${{ steps.read-config.outputs.model }}
           circuit-breaker-labs-api-key: ${{ secrets.CBL_API_KEY }}
 ```
